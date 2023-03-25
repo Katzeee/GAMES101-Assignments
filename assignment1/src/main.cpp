@@ -1,5 +1,6 @@
 #include "Triangle.hpp"
 #include "rasterizer.hpp"
+#include <cmath>
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
 #include <opencv2/opencv.hpp>
@@ -26,7 +27,14 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // TODO: Implement this function
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
-
+    Eigen::Matrix4f rotate;
+    auto cos_angle = std::cos(rotation_angle);
+    auto sin_angle = std::sin(rotation_angle);
+    rotate << cos_angle, -sin_angle, 0, 0, 
+              sin_angle, cos_angle, 0, 0, 
+              0, 0, 1, 0, 
+              0, 0, 0, 1;
+    model = rotate * model;
     return model;
 }
 
@@ -35,11 +43,15 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 {
     // Students will implement this function
 
-    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f projection;
 
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
+    projection << 1 / std::tan(eye_fov / 2) / aspect_ratio, 0, 0, 0,
+                  0 , 1 / std::tan(eye_fov / 2), 0, 0,
+                  0, 0, (zNear + zFar) / (zNear - zFar) , 2 * zNear * zFar / (zFar - zNear),
+                  0, 0, 1, 0;
 
     return projection;
 }
