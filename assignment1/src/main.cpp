@@ -28,8 +28,8 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
     Eigen::Matrix4f rotate;
-    auto cos_angle = std::cos(rotation_angle);
-    auto sin_angle = std::sin(rotation_angle);
+    auto cos_angle = std::cos(MY_PI * rotation_angle / 180);
+    auto sin_angle = std::sin(MY_PI * rotation_angle / 180);
     rotate << cos_angle, -sin_angle, 0, 0, 
               sin_angle, cos_angle, 0, 0, 
               0, 0, 1, 0, 
@@ -42,18 +42,28 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar)
 {
     // Students will implement this function
-
-    Eigen::Matrix4f projection;
-
+    zNear = -zNear;
+    zFar = -zFar;
+    Eigen::Matrix4f p2o;
+    Eigen::Matrix4f o_scale;
+    Eigen::Matrix4f o2center;
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
-    projection << 1 / std::tan(eye_fov / 2) / aspect_ratio, 0, 0, 0,
-                  0 , 1 / std::tan(eye_fov / 2), 0, 0,
-                  0, 0, (zNear + zFar) / (zNear - zFar) , 2 * zNear * zFar / (zFar - zNear),
-                  0, 0, 1, 0;
-
-    return projection;
+    auto tan_res = std::tan(MY_PI * eye_fov / 180 / 2);
+    o_scale << std::fabs(1 / zNear / tan_res / aspect_ratio), 0, 0, 0,
+               0, std::fabs(1 / zNear / tan_res), 0, 0,
+               0, 0, std::fabs(2 / zNear - zFar), 0,
+               0, 0, 0, 1;
+    o2center << 1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, -(zNear + zFar) / 2,
+                0, 0, 0, 1;
+    p2o << zNear, 0, 0, 0,
+           0, zNear, 0, 0,
+           0, 0, zNear + zFar, -zFar * zNear,
+           0, 0, 1, 0;
+    return o_scale * o2center * p2o;
 }
 
 int main(int argc, const char** argv)
