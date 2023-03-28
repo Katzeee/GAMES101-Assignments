@@ -42,18 +42,18 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar)
 {
     // Students will implement this function
+    // TODO: Implement this function
+    // Create the projection matrix for the given parameters.
+    // Then return it.
     zNear = -zNear;
     zFar = -zFar;
     Eigen::Matrix4f p2o;
     Eigen::Matrix4f o_scale;
     Eigen::Matrix4f o2center;
-    // TODO: Implement this function
-    // Create the projection matrix for the given parameters.
-    // Then return it.
     auto tan_res = std::tan(MY_PI * eye_fov / 180 / 2);
-    o_scale << std::fabs(1 / zNear / tan_res / aspect_ratio), 0, 0, 0,
-               0, std::fabs(1 / zNear / tan_res), 0, 0,
-               0, 0, std::fabs(2 / zNear - zFar), 0,
+    o_scale << -1 / (zNear * tan_res * aspect_ratio), 0, 0, 0,
+               0, -1 / (zNear * tan_res), 0, 0,
+               0, 0, -2 / (zNear - zFar), 0, // map [n, f] to [1, -1] not [-1, 1]
                0, 0, 0, 1;
     o2center << 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -63,7 +63,8 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
            0, zNear, 0, 0,
            0, 0, zNear + zFar, -zFar * zNear,
            0, 0, 1, 0;
-    return o_scale * o2center * p2o;
+    Eigen::Matrix4f projection = o_scale * o2center * p2o;
+    return projection;
 }
 
 int main(int argc, const char** argv)

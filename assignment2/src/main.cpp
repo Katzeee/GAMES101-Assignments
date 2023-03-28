@@ -28,6 +28,8 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     return model;
 }
 
+inline double DEG2RAD(double deg) {return deg * MY_PI/180;}
+
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar)
 {
     // TODO: Copy-paste your implementation from the previous assignment.
@@ -37,9 +39,9 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     Eigen::Matrix4f o_scale;
     Eigen::Matrix4f o2center;
     auto tan_res = std::tan(MY_PI * eye_fov / 180 / 2);
-    o_scale << std::fabs(1 / zNear / tan_res / aspect_ratio), 0, 0, 0,
-               0, std::fabs(1 / zNear / tan_res), 0, 0,
-               0, 0, std::fabs(2 / zNear - zFar), 0,
+    o_scale << -1 / (zNear * tan_res * aspect_ratio), 0, 0, 0,
+               0, -1 / (zNear * tan_res), 0, 0,
+               0, 0, -2 / (zNear - zFar), 0, // map [n, f] to [1, -1] not [-1, 1]
                0, 0, 0, 1;
     o2center << 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -49,29 +51,8 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
            0, zNear, 0, 0,
            0, 0, zNear + zFar, -zFar * zNear,
            0, 0, 1, 0;
-    return o_scale * o2center * p2o;
-    // float n = -zNear, f = -zFar;
-    //   float half_of_theta = eye_fov * MY_PI / 180.0f / 2;
-    //   float t = std::abs(n) * std::tan(half_of_theta), b = -t;
-    //   float r = t * aspect_ratio, l = -r;
-    //   Eigen::Matrix4f Mp2o, Mtranslate, Mscale;
-    //   Mscale << 2 / (r - l), 0, 0, 0,
-    //         0, 2 / (t - b), 0, 0,
-    //         0, 0, 2 / (n - f), 0,
-    //         0, 0, 0, 1;
-    //
-    //     Mtranslate << 1, 0, 0, -(r + l) / 2,
-    //         0, 1, 0, -(t + b) / 2,
-    //         0, 0, 1, -(n + f) / 2,
-    //         0, 0, 0, 1;
-    //
-    //     Mp2o << n, 0, 0, 0,
-    //         0, n, 0, 0,
-    //         0, 0, n + f, -(n * f),
-    //         0, 0, 1, 0;
-    //
-    //     return Mscale * Mtranslate * Mp2o;
-
+    Eigen::Matrix4f projection = o_scale * o2center * p2o;
+    return projection;
 }
 
 int main(int argc, const char** argv)
