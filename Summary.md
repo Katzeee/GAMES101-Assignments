@@ -8,3 +8,7 @@ assignment2
 ---
 - use bounding box to decrease the amount of pixels need drawing
 
+- black border around the triangle, the color at the border should be the blend of two triangles rather than the blend with black background
+
+  need to record the color buffer
+
