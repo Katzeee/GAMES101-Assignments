@@ -126,6 +126,11 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload &payload) {
   for (auto &light : lights) {
     // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular*
     // components are. Then, accumulate that result on the *result_color* object.
+    Eigen::Vector3f light_pos = Eigen::Vector3f(light.position);
+    Eigen::Vector3f diffuse = kd.array() * Eigen::Vector3f(amb_light_intensity).array() *
+                              std::max(0.0, static_cast<double>(light_pos.dot(normal))) /
+                              std::pow((point - light_pos).norm(), 2);
+    result_color += diffuse;
   }
 
   return result_color * 255.f;
