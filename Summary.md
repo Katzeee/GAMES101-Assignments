@@ -8,7 +8,12 @@ assignment2
 ---
 - use bounding box to decrease the amount of pixels need drawing
 
-- black border around the triangle, the color at the border should be the blend of two triangles rather than the blend with black background
+- Black border around the triangle 
 
-  need to record the color buffer
+  The color at the border should be the blend of two triangles rather than the blend with black background
 
+  So you can't shader a pixel by `color * count / 4`, you need to record the color in a buffer then average them
+
+assignment3
+---
+- half vector is the normalization of the `l` plus the `v` which is `(v + l).nromalized()` not `(v + l) / 2`

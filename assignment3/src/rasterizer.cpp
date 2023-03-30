@@ -2,10 +2,10 @@
 // Created by goksu on 4/6/19.
 //
 
-#include "rasterizer.hpp"
 #include <math.h>
 #include <algorithm>
 #include <opencv2/opencv.hpp>
+#include "rasterizer.hpp"
 
 rst::pos_buf_id rst::rasterizer::load_positions(const std::vector<Eigen::Vector3f> &positions) {
   auto id = get_next_id();
@@ -239,10 +239,14 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
           depth_buf[get_index(i, j)] = z_interpolated;
 
           Eigen::Vector3f interpolated_color = interpolate(alpha, beta, gamma, t.color[0], t.color[1], t.color[2], 1);
-          Eigen::Vector3f interpolate_normal = interpolate(alpha, beta, gamma, t.normal[0], t.normal[1], t.normal[2], 1);
-          Eigen::Vector2f interpolate_texcoords = interpolate(alpha, beta, gamma, t.tex_coords[0], t.tex_coords[1], t.tex_coords[2], 1);
+          Eigen::Vector3f interpolate_normal =
+              interpolate(alpha, beta, gamma, t.normal[0], t.normal[1], t.normal[2], 1);
+          Eigen::Vector2f interpolate_texcoords =
+              interpolate(alpha, beta, gamma, t.tex_coords[0], t.tex_coords[1], t.tex_coords[2], 1);
 
-          fragment_shader_payload payload(interpolated_color, interpolate_normal, interpolate_texcoords, texture ? &*texture : nullptr);
+          fragment_shader_payload payload(interpolated_color, interpolate_normal, interpolate_texcoords,
+                                          texture ? &*texture : nullptr);
+          payload.view_pos = interpolate(alpha, beta, gamma, view_pos[0], view_pos[1], view_pos[2], 1);
           Eigen::Vector3f color = fragment_shader(payload);
 
           set_pixel(Vector2i(i, j), color);
