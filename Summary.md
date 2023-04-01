@@ -32,3 +32,7 @@ assignment5
 - The light direction is gotten via translate the `raster coordinate` -> `NDC coordinate` -> `camera` -> `world`
 
   Mention that when converting to camera's, you should consider FOV and aspect ratio.
+
+assignment6
+---
+- When you cast a ray point to the negative direction, you will first reach the `pMax`, then the `pMin`, so you need to swap the `tmin` and `tmax`
