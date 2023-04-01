@@ -1,8 +1,9 @@
 assignment 1
+
 ---
 - top-down: when calculating width, notice you should get a positive value of `Size * Aspect`
 
-- use radias rather than degree
+- use radians rather than degree
 
 assignment2
 ---
@@ -17,3 +18,9 @@ assignment2
 assignment3
 ---
 - half vector is the normalization of the `l` plus the `v` which is `(v + l).nromalized()` not `(v + l) / 2`
+
+- mind the `u` `v` may out of bound [0, 1]
+
+  weird bug on Windows: `u` and `v` can't equal to 1, must smaller than 1
+
+- really take care of float and int, there is a big difference between `1 / x` and `1.0 / x`
