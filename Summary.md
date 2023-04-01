@@ -24,3 +24,5 @@ assignment3
   weird bug on Windows: `u` and `v` can't equal to 1, must smaller than 1
 
 - really take care of float and int, there is a big difference between `1 / x` and `1.0 / x`
+
+- compute the TBN matrix with normalized normal vector
