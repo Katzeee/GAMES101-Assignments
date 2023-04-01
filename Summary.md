@@ -26,3 +26,9 @@ assignment3
 - really take care of float and int, there is a big difference between `1 / x` and `1.0 / x`
 
 - compute the TBN matrix with normalized normal vector
+
+assignment5
+---
+- The light direction is gotten via translate the `raster coordinate` -> `NDC coordinate` -> `camera` -> `world`
+
+  Mention that when converting to camera's, you should consider FOV and aspect ratio.
