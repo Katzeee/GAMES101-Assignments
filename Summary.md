@@ -36,3 +36,5 @@ assignment5
 assignment6
 ---
 - When you cast a ray point to the negative direction, you will first reach the `pMax`, then the `pMin`, so you need to swap the `tmin` and `tmax`
+
+- `Bounds3::IntersectP` should consider the EQUAL condition when returning. When the light pass a box with volume equals to 0(like quad), it does pass through that box.

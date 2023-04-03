@@ -95,6 +95,7 @@ Intersection BVHAccel::getIntersection(BVHBuildNode *node, const Ray &ray) const
   while (!q.empty()) {
     tmp_node = q.front();
     q.pop();
+    std::array<int, 3> dirsIsNeg{int(ray.direction.x > 0), int(ray.direction.y > 0), int(ray.direction.z > 0)};
     if (!tmp_node->bounds.IntersectP(ray, ray.direction_inv, {false, false, false})) {
       continue;
     }
@@ -113,6 +114,31 @@ Intersection BVHAccel::getIntersection(BVHBuildNode *node, const Ray &ray) const
   }
   return isect;
 }
+
+// Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
+// {
+// 	Intersection inter;
+
+// 	float x = ray.direction.x;
+// 	float y = ray.direction.y;
+// 	float z = ray.direction.z;
+// 	std::array<int, 3> dirsIsNeg{ int(x < 0),int(y < 0),int(z < 0) };
+
+// 	if (node->bounds.IntersectP(ray, ray.direction_inv, dirsIsNeg) == false) return inter;
+
+// 	if (node->left == nullptr && node->right == nullptr)
+// 	{
+// 		inter = node->object->getIntersection(ray);
+// 		return inter;
+// 	}
+
+// 	auto hit1 = getIntersection(node->left, ray);
+// 	auto hit2 = getIntersection(node->right, ray);
+
+// 	if (hit1.distance < hit2.distance)
+// 		return hit1;
+// 	return hit2;
+// }
 
 void BVHAccel::getSample(BVHBuildNode *node, float p, Intersection &pos, float &pdf) {
   if (node->left == nullptr || node->right == nullptr) {

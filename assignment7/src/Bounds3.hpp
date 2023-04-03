@@ -82,12 +82,7 @@ inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir, const st
   auto tenter = std::max(std::max(tmin.x, tmin.y), tmin.z);
   auto texit = std::min(std::min(tmax.x, tmax.y), tmax.z);
   // std::cout << tmin << ", " << tmax << std::endl;
-  if (tenter < texit && texit > 0) {
-    // ray.t = tenter;
-    // std::cout << "true" << std::endl;
-    return true;
-  }
-  return false;
+  return tenter <= texit && texit >= 0;
 }
 
 inline Bounds3 Union(const Bounds3 &b1, const Bounds3 &b2) {
